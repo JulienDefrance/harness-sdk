@@ -1,0 +1,29 @@
+# frozen_string_literal: true
+
+require "rake/clean"
+require "bundler/gem_tasks"
+
+begin
+  require "rspec/core/rake_task"
+  RSpec::Core::RakeTask.new(:spec)
+  task default: :spec
+rescue LoadError
+  desc "Run specs (rspec not available)"
+  task :spec do
+    abort "RSpec is not available. Install it with: gem install rspec"
+  end
+  task default: :spec
+end
+
+begin
+  require "rubocop/rake_task"
+  RuboCop::RakeTask.new(:rubocop)
+rescue LoadError
+  desc "Run RuboCop (rubocop not available)"
+  task :rubocop do
+    abort "RuboCop is not available. Install it with: gem install rubocop"
+  end
+end
+
+desc "Run all checks (specs + rubocop)"
+task check: %i[spec rubocop]
