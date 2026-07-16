@@ -2,7 +2,7 @@
   "id": "FEAT-001",
   "type": "feat",
   "description": "Write RSpec specs for the Bedrock, Anthropic model providers and MCP Client, following existing patterns from openai_spec.rb and ollama_spec.rb.",
-  "status": "in_progress",
+  "status": "completed",
   "steps": [
     "Create spec/strands/models/bedrock_spec.rb following the pattern in spec/strands/models/openai_spec.rb. Include: (a) #initialize tests for config storage, default region, AWS credential handling, SDK detection; (b) #update_config and #get_config tests; (c) #inspect test showing redacted output; (d) #stream tests with HTTP path mocked (stub_http_streaming helper) covering: successful text response with Bedrock JSON event stream format, tool use response with toolUse events, 429 rate limit raising ModelThrottledError, 400 context overflow raising ContextWindowOverflowError. Bedrock streams binary events containing JSON objects like {messageStart:...}, {contentBlockStart:...}, {contentBlockDelta:...}, {contentBlockStop:...}, {messageStop:...}, {metadata:...}.",
     "Create spec/strands/models/anthropic_spec.rb following the same pattern. Include: (a) #initialize tests for config storage, default base_url, api_key from ENV; (b) #update_config and #get_config tests; (c) #inspect test; (d) #format_request tests for messages formatting, system prompt, tools, tool_choice variants (ToolChoiceAuto, ToolChoiceAny, ToolChoiceTool); (e) #stream tests with SSE format mocked covering: text response with message_start/content_block_start/content_block_delta/content_block_stop/message_delta events, tool use response with tool_use content blocks and input_json_delta, 429 rate limit, 529 overloaded, 400 context overflow. Anthropic SSE lines are 'data: {json}' format.",
@@ -23,5 +23,5 @@
     "Run `ruby -c spec/strands/tools/mcp_client_spec.rb` and confirm Syntax OK"
   ],
   "blocked_reason": null,
-  "findings": ""
+  "findings": "All three spec files created and pass ruby -c syntax validation. Followed openai_spec.rb and ollama_spec.rb patterns exactly: stub_http_streaming/stub_http_error helpers, collect_events helper, instance_double mocks for Net::HTTP. Bedrock spec forces HTTP path by setting @use_sdk = false. MCP Client spec mocks IO.pipe and Process.spawn for stdio transport, and Net::HTTP for HTTP transport. INTEGRATIONS_ONLY network prevents running rspec but syntax is confirmed valid."
 }
