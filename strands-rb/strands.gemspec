@@ -15,7 +15,7 @@ Gem::Specification.new do |spec|
                      "interventions, and session management."
   spec.homepage = "https://github.com/strands-agents/strands-rb"
   spec.license = "Apache-2.0"
-  spec.required_ruby_version = ">= 3.2.0"
+  spec.required_ruby_version = ">= 4.0.0"
 
   spec.metadata["homepage_uri"] = spec.homepage
   spec.metadata["source_code_uri"] = "https://github.com/strands-agents/strands-rb"

@@ -7,8 +7,8 @@
   "test_command": "Cannot run tests (INTEGRATIONS_ONLY network, rspec not installed). Use `ruby -c` for syntax validation.",
   "verification_instructions": "For each new/modified Ruby file, run `ruby -c <file>` to verify syntax. For specs, ensure they follow the patterns in existing spec files (openai_spec.rb, ollama_spec.rb). For docs, ensure YARD tags are valid.",
   "snapshot_or_generated_files": null,
-  "setup_instructions": "Ruby 3.4.4 available via mise. Cannot install gems due to INTEGRATIONS_ONLY network.",
-  "environment_constraints": "INTEGRATIONS_ONLY network - no package installs, no external HTTP. Ruby 3.4.4 pre-installed. RSpec not installed - cannot run specs, only validate syntax. No bundler gems available.",
+  "setup_instructions": "Ruby 4.0.6 available via mise. Cannot install gems due to INTEGRATIONS_ONLY network.",
+  "environment_constraints": "INTEGRATIONS_ONLY network - no package installs, no external HTTP. Ruby 4.0.6 pre-installed. RSpec not installed - cannot run specs, only validate syntax. No bundler gems available.",
   "contribution_requirements": "Follow existing patterns. RSpec specs use instance_double mocks for HTTP. YARD docs use standard @param, @return, @example, @raise tags.",
   "key_patterns": "Model specs mock Net::HTTP with instance_double and stub_http_streaming/stub_http_error helpers. Models include Base and StreamEventBuilder modules. Use build_stream_event helper for events. Spec structure: #initialize, #update_config, #get_config, #format_request (if public), #stream with contexts for success, tool calls, errors.",
   "relevant_files": [

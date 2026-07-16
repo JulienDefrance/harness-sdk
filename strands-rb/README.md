@@ -17,7 +17,7 @@ A Ruby framework for building, deploying, and managing AI agents. Build powerful
 
 ## Requirements
 
-- Ruby >= 3.2.0
+- Ruby >= 4.0.0
 - No external runtime dependencies (stdlib only)
 
 ## Installation

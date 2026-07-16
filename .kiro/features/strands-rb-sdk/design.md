@@ -71,23 +71,23 @@ Strands
 
 ## 2. Python-to-Ruby Mapping
 
-| Python Pattern | Ruby Equivalent | Rationale |
-|---|---|---|
-| `__call__` method | `#call` method (callable) | Ruby convention for callable objects |
-| `@tool` decorator | `tool` DSL method or class macro | Ruby uses class-level DSL methods |
-| ABC (Abstract Base Class) | Module with `raise NotImplementedError` | Ruby duck typing + documentation |
-| TypedDict | Hash with documented keys, or Data/Struct | Lightweight, no dependency |
-| dataclass | Data.define (Ruby 3.2+) or Struct | Immutable value objects |
-| asyncio/async-await | Threads + Fiber scheduler | Ruby concurrency model |
-| Generator/yield | Enumerator or block | Ruby iteration patterns |
-| Type hints | YARD documentation + RBS/Sorbet optional | Runtime duck typing |
-| `**kwargs` | Keyword arguments / `**opts` | Native Ruby feature |
-| Context managers | Block with ensure | `begin/ensure` pattern |
-| f-strings | String interpolation | Native Ruby feature |
-| logging module | Logger (stdlib) | Standard library |
-| Protocol classes | Duck typing + respond_to? | Ruby convention |
-| Union types | Case/pattern matching | Ruby 3.0+ pattern matching |
-| Pydantic BaseModel | Dry::Struct or plain Data | Minimal deps preferred |
+| Python Pattern | Ruby Equivalent                           | Rationale                            |
+|---|-------------------------------------------|--------------------------------------|
+| `__call__` method | `#call` method (callable)                 | Ruby convention for callable objects |
+| `@tool` decorator | `tool` DSL method or class macro          | Ruby uses class-level DSL methods    |
+| ABC (Abstract Base Class) | Module with `raise NotImplementedError`   | Ruby duck typing + documentation     |
+| TypedDict | Hash with documented keys, or Data/Struct | Lightweight, no dependency           |
+| dataclass | Data.define (Ruby 4.0+) or Struct         | Immutable value objects              |
+| asyncio/async-await | Threads + Fiber scheduler                 | Ruby concurrency model               |
+| Generator/yield | Enumerator or block                       | Ruby iteration patterns              |
+| Type hints | YARD documentation + RBS/Sorbet optional  | Runtime duck typing                  |
+| `**kwargs` | Keyword arguments / `**opts`              | Native Ruby feature                  |
+| Context managers | Block with ensure                         | `begin/ensure` pattern               |
+| f-strings | String interpolation                      | Native Ruby feature                  |
+| logging module | Logger (stdlib)                           | Standard library                     |
+| Protocol classes | Duck typing + respond_to?                 | Ruby convention                      |
+| Union types | Case/pattern matching                     | Ruby 4.0+ pattern matching           |
+| Pydantic BaseModel | Dry::Struct or plain Data                 | Minimal deps preferred               |
 
 ---
 
