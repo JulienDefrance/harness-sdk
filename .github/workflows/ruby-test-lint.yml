@@ -1,0 +1,69 @@
+name: "Ruby: Test and Lint"
+
+on:
+  workflow_call:
+    inputs:
+      ref:
+        required: true
+        type: string
+
+jobs:
+  test:
+    name: Unit Tests - Ruby ${{ matrix.ruby-version }}
+    permissions:
+      contents: read
+    strategy:
+      matrix:
+        ruby-version: ["3.2", "3.3", "3.4"]
+      fail-fast: false
+    runs-on: ubuntu-latest
+    # Successful test legs run in well under 5 min; 20 min caps a hung step
+    # instead of letting it run to the 6-hour default.
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: strands-rb
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ inputs.ref }}
+          persist-credentials: false
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby-version }}
+          bundler-cache: true
+          working-directory: strands-rb
+
+      - name: Run specs
+        run: bundle exec rspec
+
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    # Lint typically runs in under a minute; 20 min caps a hung step instead
+    # of letting it run to the 6-hour default.
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    defaults:
+      run:
+        working-directory: strands-rb
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ inputs.ref }}
+          persist-credentials: false
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.2"
+          bundler-cache: true
+          working-directory: strands-rb
+
+      - name: Run rubocop
+        run: bundle exec rubocop
