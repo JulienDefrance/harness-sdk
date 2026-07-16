@@ -35,7 +35,7 @@
 
 Strands Agents is a simple yet powerful SDK that takes a model-driven approach to building and running AI agents. From simple conversational assistants to complex autonomous workflows, from local development to production deployment, Strands Agents scales with your needs.
 
-This monorepo contains the Python SDK, TypeScript SDK, documentation site, and supporting packages:
+This monorepo contains the Python SDK, TypeScript SDK, Ruby SDK, documentation site, and supporting packages:
 
 | Directory | Description |
 |-----------|-------------|
@@ -59,7 +59,7 @@ MCP, streaming, multi-agent patterns, and structured output are all built in.
 
 ## Quick Start
 
-Both SDKs default to the Amazon Bedrock model provider, so you'll need AWS credentials configured and model access enabled for Claude Sonnet. The [Quickstart Guide](https://strandsagents.com/docs/user-guide/quickstart/overview/) covers configuring other providers (Anthropic, OpenAI, Gemini, Ollama, and more).
+The Python and TypeScript SDKs default to the Amazon Bedrock model provider when no model is specified; the Ruby SDK requires an explicit model instance (see the Ruby example below). Either way, you'll need AWS credentials configured and model access enabled for Claude Sonnet to use Bedrock. The [Quickstart Guide](https://strandsagents.com/docs/user-guide/quickstart/overview/) covers configuring other providers (Anthropic, OpenAI, Gemini, Ollama, and more).
 
 ### Python
 
@@ -126,7 +126,7 @@ For detailed guidance & examples, explore our documentation:
 - [Quick Start Guide](https://strandsagents.com/docs/user-guide/quickstart/overview/)
 - [Agent Loop](https://strandsagents.com/docs/user-guide/concepts/agents/agent-loop/)
 - [Examples](https://strandsagents.com/docs/examples/)
-- API Reference: [Python](https://strandsagents.com/docs/api/python/strands.agent.agent/) · [TypeScript](https://strandsagents.com/docs/api/typescript/)
+- API Reference: [Python](https://strandsagents.com/docs/api/python/strands.agent.agent/) · [TypeScript](https://strandsagents.com/docs/api/typescript/) · Ruby (not yet published; generate locally with `bundle exec yard doc` in `strands-rb/`)
 - [Production & Deployment Guide](https://strandsagents.com/docs/user-guide/deploy/operating-agents-in-production/)
 
 The docs themselves live in this monorepo under [`site/`](site/), and doc PRs are welcome alongside code changes.
