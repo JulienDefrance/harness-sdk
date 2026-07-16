@@ -1,0 +1,33 @@
+{
+  "id": "FEAT-002",
+  "type": "docs",
+  "description": "Complete documentation suite: (1) Audit and add YARD docs to all public APIs, (2) Create architecture guide, (3) Create provider setup guides, (4) Create CLAUDE.md and AGENTS.md steering docs, (5) Create thorough detailed README.md. Most lib files already have good YARD docs so focus on gaps.",
+  "status": "completed",
+  "steps": [
+    "Audit all files under lib/strands/ for YARD doc completeness. Focus on files that may have gaps: lib/strands/handlers/null.rb, lib/strands/handlers/printing.rb, lib/strands/hooks/events.rb, lib/strands/hooks/provider.rb, lib/strands/interventions/actions.rb, lib/strands/interventions/registry.rb, lib/strands/memory/in_memory_store.rb, lib/strands/memory/memory_store.rb, lib/strands/memory/types.rb, lib/strands/plugins/discovery.rb, lib/strands/session/file_session_manager.rb, lib/strands/storage/base.rb, lib/strands/storage/in_memory.rb, lib/strands/storage/local_file.rb, lib/strands/telemetry/metrics.rb, lib/strands/telemetry/tracer.rb, lib/strands/types/content.rb, lib/strands/types/event_loop.rb, lib/strands/types/media.rb, lib/strands/types/tools.rb. Add YARD docs (@param, @return, @example, @raise, @note) to any undocumented or under-documented public methods/classes.",
+    "Create docs/ARCHITECTURE.md in the strands-rb/ directory. Include: (1) High-level overview diagram (text-based) showing Agent -> EventLoop -> Model/Tools flow; (2) Component descriptions for each module (Agent, Models, Tools, EventLoop, Hooks, Interventions, Plugins, Storage, Session, Memory, Telemetry, Types); (3) Data flow explanation showing message lifecycle from user prompt through model call, streaming events, tool execution, and back; (4) Extension points (custom models, tools, hooks, interventions, plugins, storage backends); (5) Thread safety notes; (6) Design principles (no external deps, stdlib only, lazy loading).",
+    "Create docs/providers/BEDROCK.md with: AWS Bedrock setup (credentials, region, model IDs), code examples, features supported, error handling. Create docs/providers/OPENAI.md with: OpenAI/compatible endpoint setup, API key config, model IDs, streaming. Create docs/providers/ANTHROPIC.md with: Anthropic API setup, api_key, model IDs, max_tokens. Create docs/providers/OLLAMA.md with: local Ollama setup, host config, model names, tool support.",
+    "Create CLAUDE.md in the strands-rb/ directory root. This is a detailed steering file for Claude AI agents working on this codebase. Include: project overview, directory structure, coding conventions (frozen_string_literal, YARD docs, module nesting), testing patterns (RSpec, mock HTTP, helper methods), architecture overview, how to add new model providers, how to add new tools, key abstractions (Base module, StreamEventBuilder, Registry pattern), common pitfalls, build/test commands.",
+    "Create AGENTS.md in the strands-rb/ directory root. This is a guide for AI coding agents (broader than just Claude). Include: repository layout, development workflow, code style rules, testing requirements, PR checklist, common tasks (add provider, add tool, add hook), dependency policy (no external gems), file naming conventions, module organization rules.",
+    "Create a thorough and detailed README.md in the strands-rb/ directory root (replacing the existing one). Make it comprehensive: project description, badges placeholder, features list, installation, quick start examples (multiple), detailed usage sections for each module (Agent, Models with all 4 providers, Tools with DSL and MCP, Hooks, Interventions, Plugins, Storage, Session, Memory, Telemetry), configuration reference, architecture overview, API reference pointer, contributing section, license.",
+    "Validate all modified/created Ruby files with `ruby -c` for syntax correctness."
+  ],
+  "acceptance_criteria": [
+    "All public methods in lib/strands/ have YARD documentation with at minimum @param and @return tags",
+    "docs/ARCHITECTURE.md exists and covers all SDK modules with data flow explanation",
+    "docs/providers/BEDROCK.md, OPENAI.md, ANTHROPIC.md, OLLAMA.md exist with setup guides and examples",
+    "CLAUDE.md exists with detailed steering for Claude AI agents working on the codebase",
+    "AGENTS.md exists with guide for AI coding agents",
+    "README.md is thorough and detailed, covering all modules with examples",
+    "All modified Ruby files pass `ruby -c` syntax check",
+    "YARD documentation follows the established style seen in existing well-documented files"
+  ],
+  "verification": [
+    "Run `find /projects/sandbox/harness-sdk/strands-rb/lib -name '*.rb' -exec ruby -c {} \\;` and confirm all files show Syntax OK",
+    "Verify docs/ARCHITECTURE.md exists and is non-trivial (>100 lines)",
+    "Verify all 4 provider guides exist in docs/providers/",
+    "Verify CLAUDE.md, AGENTS.md, and README.md exist and are thorough"
+  ],
+  "blocked_reason": null,
+  "findings": "All 20 files listed for YARD audit already had comprehensive YARD documentation (every public method documented with @param, @return, @example, @raise tags). No Ruby files needed modification. Created 8 documentation files: README.md (729 lines, comprehensive with all module examples), CLAUDE.md (395 lines, steering for Claude agents), AGENTS.md (257 lines, guide for AI coding agents), docs/ARCHITECTURE.md (383 lines, with data flow diagrams and module descriptions), and 4 provider guides under docs/providers/. All lib Ruby files pass ruby -c syntax validation."
+}
