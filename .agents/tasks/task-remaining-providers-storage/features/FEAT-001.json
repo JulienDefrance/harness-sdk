@@ -1,0 +1,44 @@
+{
+  "id": "FEAT-001",
+  "type": "feat",
+  "description": "Implement Storage::S3 and Session::S3Manager with specs, and all 6 remaining model providers (Gemini, LiteLLM, LlamaCpp, Mistral, SageMaker, Writer) with specs. Update autoload module files and gemspec.",
+  "status": "in_progress",
+  "steps": [
+    "1. Create strands-rb/lib/strands/storage/s3.rb implementing Strands::Storage::S3 that includes Storage::Base. Lazy-load 'aws-sdk-s3' at runtime (begin/rescue LoadError with helpful message). Methods: initialize(bucket:, prefix:, region_name: nil), read(key), write(key, data), delete(key), exists?(key), list(prefix). Uses Aws::S3::Client for get_object/put_object/delete_object/list_objects_v2. The client is created lazily on first use.",
+    "2. Create strands-rb/spec/strands/storage/s3_spec.rb testing S3 storage with mocked Aws::S3::Client. Test all CRUD operations, list with pagination, key normalization, and LoadError handling.",
+    "3. Create strands-rb/lib/strands/session/s3_session_manager.rb implementing Strands::Session::S3Manager < Manager. Uses Storage::S3 as backend. Methods: initialize(bucket:, prefix:, session_id: nil, region_name: nil), initialize_session(agent), append_message(message, agent), sync_agent(agent), restore(agent). Stores session state as JSON under '{prefix}/sessions/{session_id}/state.json'.",
+    "4. Create strands-rb/spec/strands/session/s3_manager_spec.rb testing S3Manager with a mocked Storage::S3 instance.",
+    "5. Create strands-rb/lib/strands/models/gemini.rb - Strands::Models::Gemini using net/http to call https://generativelanguage.googleapis.com/v1beta/. SSE streaming via POST to /models/{model}:streamGenerateContent?alt=sse&key={api_key}. Format messages in Gemini Content/Part format. Handle function calling (functionCall/functionResponse parts). Map finish reasons. Initialize with model_id:, api_key:, **params.",
+    "6. Create strands-rb/spec/strands/models/gemini_spec.rb with mocked HTTP, testing init, format_request, streaming text, tool calls, errors.",
+    "7. Create strands-rb/lib/strands/models/lite_llm.rb - Strands::Models::LiteLLM. This connects to a LiteLLM proxy server which exposes an OpenAI-compatible API. Essentially a thin wrapper that composes with OpenAI provider logic but uses a configurable base_url (default http://localhost:4000) and prefixes model_id. Initialize with model_id:, api_key: nil, base_url: 'http://localhost:4000', **params.",
+    "8. Create strands-rb/spec/strands/models/lite_llm_spec.rb testing LiteLLM provider with mocked HTTP.",
+    "9. Create strands-rb/lib/strands/models/llama_cpp.rb - Strands::Models::LlamaCpp. Connects to llama.cpp server's OpenAI-compatible /v1/chat/completions endpoint (default http://localhost:8080). Supports grammar constraints, mirostat, tfs_z, repeat_penalty etc as extra params in request body. Initialize with model_id: 'default', base_url: 'http://localhost:8080', **params.",
+    "10. Create strands-rb/spec/strands/models/llama_cpp_spec.rb testing LlamaCpp provider with mocked HTTP.",
+    "11. Create strands-rb/lib/strands/models/mistral.rb - Strands::Models::Mistral. Uses Mistral API (https://api.mistral.ai/v1/chat/completions). SSE streaming, tool calling. Temperature validation (0.0-1.0). Initialize with model_id:, api_key: nil, base_url: 'https://api.mistral.ai', **params.",
+    "12. Create strands-rb/spec/strands/models/mistral_spec.rb testing Mistral provider with mocked HTTP.",
+    "13. Create strands-rb/lib/strands/models/sagemaker.rb - Strands::Models::SageMaker. Lazy-loads aws-sdk-sagemakerruntime. Uses invoke_endpoint_with_response_stream for streaming. Initialize with endpoint_name:, region_name: nil, model_id: nil, **params. Parses SSE chunks from the response stream.",
+    "14. Create strands-rb/spec/strands/models/sagemaker_spec.rb testing SageMaker provider with mocked AWS client.",
+    "15. Create strands-rb/lib/strands/models/writer.rb - Strands::Models::Writer. Uses Writer API (https://api.writer.com/v1/chat). SSE streaming, tool calling, context overflow detection. Initialize with model_id:, api_key: nil, base_url: 'https://api.writer.com', **params.",
+    "16. Create strands-rb/spec/strands/models/writer_spec.rb testing Writer provider with mocked HTTP.",
+    "17. Update strands-rb/lib/strands/models.rb to add autoload entries for Gemini, LiteLLM, LlamaCpp, Mistral, SageMaker, Writer.",
+    "18. Update strands-rb/lib/strands/storage.rb to add autoload :S3, 'strands/storage/s3'.",
+    "19. Update strands-rb/lib/strands/session.rb to add autoload :S3Manager, 'strands/session/s3_session_manager'."
+  ],
+  "acceptance_criteria": [
+    "ruby -c strands-rb/lib/strands/storage/s3.rb passes",
+    "ruby -c strands-rb/lib/strands/session/s3_session_manager.rb passes",
+    "ruby -c for all 6 new model provider files passes",
+    "ruby -c for all new spec files passes",
+    "ruby -e \"require_relative 'strands-rb/lib/strands'\" loads without error (autoloads are declared)",
+    "bundle exec rspec runs and passes for mocked specs (new specs mock all external deps)",
+    "All files have frozen_string_literal comment and YARD documentation"
+  ],
+  "verification": [
+    "cd /projects/sandbox/harness-sdk/strands-rb && ruby -c lib/strands/storage/s3.rb && ruby -c lib/strands/session/s3_session_manager.rb",
+    "cd /projects/sandbox/harness-sdk/strands-rb && ruby -c lib/strands/models/gemini.rb && ruby -c lib/strands/models/lite_llm.rb && ruby -c lib/strands/models/llama_cpp.rb && ruby -c lib/strands/models/mistral.rb && ruby -c lib/strands/models/sagemaker.rb && ruby -c lib/strands/models/writer.rb",
+    "cd /projects/sandbox/harness-sdk/strands-rb && ruby -e \"require_relative 'lib/strands'\"",
+    "cd /projects/sandbox/harness-sdk/strands-rb && bundle exec rspec --no-color 2>&1 | tail -20"
+  ],
+  "blocked_reason": null,
+  "findings": ""
+}

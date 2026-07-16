@@ -1,0 +1,32 @@
+{
+  "project_type": "Ruby SDK gem for AI agents framework",
+  "language": "Ruby",
+  "build_system": "Bundler with gemspec, Rake for tasks",
+  "test_framework": "RSpec 3.13 with instance_double mocking for HTTP calls",
+  "build_command": "cd strands-rb && ruby -e \"require_relative 'lib/strands'; puts 'OK'\"",
+  "test_command": "cd strands-rb && bundle exec rspec",
+  "verification_instructions": "1. Run 'ruby -e require_relative lib/strands' to verify loading. 2. Run 'bundle exec rspec' for specs.",
+  "snapshot_or_generated_files": null,
+  "setup_instructions": "cd strands-rb && bundle install (not available in INTEGRATIONS_ONLY mode)",
+  "environment_constraints": "INTEGRATIONS_ONLY network - cannot install gems, cannot make external HTTP calls. Ruby 3.4.4 available. Use AST-level validation (ruby -c) and existing bundled rspec.",
+  "contribution_requirements": "frozen_string_literal comment on all files, YARD docs, ~120 char line length, follow existing patterns exactly",
+  "key_patterns": "Models use include Base + include StreamEventBuilder, SSE parsing with Net::HTTP streaming, build_stream_event factory, format_request/stream methods. Storage uses include Base with normalize_key/normalize_prefix. Session extends Manager. All specs use instance_double for HTTP mocking. autoload pattern in module files.",
+  "relevant_files": [
+    "strands-rb/lib/strands/models/openai.rb",
+    "strands-rb/lib/strands/models/ollama.rb",
+    "strands-rb/lib/strands/models/base.rb",
+    "strands-rb/lib/strands/models/stream_event_builder.rb",
+    "strands-rb/lib/strands/storage/base.rb",
+    "strands-rb/lib/strands/storage/local_file.rb",
+    "strands-rb/lib/strands/storage/in_memory.rb",
+    "strands-rb/lib/strands/session/session_manager.rb",
+    "strands-rb/lib/strands/session/file_session_manager.rb",
+    "strands-rb/lib/strands/models.rb",
+    "strands-rb/lib/strands/storage.rb",
+    "strands-rb/lib/strands/session.rb",
+    "strands-rb/spec/strands/models/openai_spec.rb",
+    "strands-rb/spec/strands/storage/local_file_spec.rb",
+    "strands-rb/strands.gemspec"
+  ],
+  "directory_structure": "strands-rb/lib/strands/ contains the SDK. Models in models/, storage in storage/, sessions in session/. Specs mirror under spec/strands/. Python references in strands-py/src/strands/."
+}

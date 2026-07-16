@@ -10,5 +10,11 @@ module Strands
     autoload :Bedrock, "strands/models/bedrock"
     autoload :Anthropic, "strands/models/anthropic"
     autoload :Ollama, "strands/models/ollama"
+    autoload :Gemini, "strands/models/gemini"
+    autoload :LiteLLM, "strands/models/lite_llm"
+    autoload :LlamaCpp, "strands/models/llama_cpp"
+    autoload :Mistral, "strands/models/mistral"
+    autoload :SageMaker, "strands/models/sagemaker"
+    autoload :Writer, "strands/models/writer"
   end
 end
