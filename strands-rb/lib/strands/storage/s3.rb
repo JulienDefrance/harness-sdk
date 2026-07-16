@@ -44,8 +44,10 @@ module Strands
         full_key = "#{@prefix}#{normalized}"
         response = client.get_object(bucket: @bucket, key: full_key)
         response.body.read
-      rescue client_no_such_key_error
-        nil
+      rescue StandardError => e
+        return nil if no_such_key_error?(e)
+
+        raise
       end
 
       # Write data to S3 under the given key.
@@ -78,8 +80,10 @@ module Strands
         full_key = "#{@prefix}#{normalized}"
         client.head_object(bucket: @bucket, key: full_key)
         true
-      rescue client_not_found_error
-        false
+      rescue StandardError => e
+        return false if not_found_error?(e)
+
+        raise
       end
 
       # List keys matching the given prefix.
@@ -134,18 +138,23 @@ module Strands
         end
       end
 
-      # Returns the error class for NoSuchKey responses.
+      # Check if an error indicates a missing key.
       #
-      # @return [Class] the Aws::S3::Errors::NoSuchKey error class
-      def client_no_such_key_error
-        Aws::S3::Errors::NoSuchKey
+      # @param error [StandardError] the error to check
+      # @return [Boolean]
+      def no_such_key_error?(error)
+        error.class.name == "Aws::S3::Errors::NoSuchKey" ||
+          (error.respond_to?(:code) && error.code == "NoSuchKey")
       end
 
-      # Returns the error class for NotFound responses.
+      # Check if an error indicates a not-found response.
       #
-      # @return [Class] the Aws::S3::Errors::NotFound error class
-      def client_not_found_error
-        Aws::S3::Errors::NotFound
+      # @param error [StandardError] the error to check
+      # @return [Boolean]
+      def not_found_error?(error)
+        error.class.name == "Aws::S3::Errors::NotFound" ||
+          error.class.name == "Aws::S3::Errors::NoSuchKey" ||
+          (error.respond_to?(:code) && %w[NotFound NoSuchKey].include?(error.code))
       end
     end
   end

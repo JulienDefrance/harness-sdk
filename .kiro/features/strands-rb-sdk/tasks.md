@@ -83,13 +83,13 @@
 - [x] Implement Storage::Base interface
 - [x] Implement Storage::InMemory
 - [x] Implement Storage::LocalFile
-- [ ] Implement Storage::S3 (lazy-loaded aws-sdk)
+- [x] Implement Storage::S3 (lazy-loaded aws-sdk)
 - [x] Write specs for each backend
 
 ### Task 4.2: Session Management
 - [x] Implement Session::Manager interface
 - [x] Implement Session::FileManager
-- [ ] Implement Session::S3Manager
+- [x] Implement Session::S3Manager
 - [x] Implement session lifecycle (create, save, load, delete)
 - [x] Write specs for session CRUD
 
@@ -124,12 +124,12 @@
 
 ### Task 5.4: Other Providers
 - [x] Implement Ollama provider
-- [ ] Implement Gemini provider
-- [ ] Implement LiteLLM provider
-- [ ] Implement LlamaCpp provider
-- [ ] Implement Mistral provider
-- [ ] Implement SageMaker provider
-- [ ] Implement Writer provider
+- [x] Implement Gemini provider
+- [x] Implement LiteLLM provider
+- [x] Implement LlamaCpp provider
+- [x] Implement Mistral provider
+- [x] Implement SageMaker provider
+- [x] Implement Writer provider
 
 ---
 

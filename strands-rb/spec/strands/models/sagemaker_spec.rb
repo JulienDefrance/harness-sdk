@@ -10,11 +10,12 @@ RSpec.describe Strands::Models::SageMaker do
 
   let(:mock_client) { instance_double("Aws::SageMakerRuntime::Client") }
 
-  before do
-    allow(Aws::SageMakerRuntime::Client).to receive(:new).and_return(mock_client)
+  subject(:model) do
+    m = described_class.new(endpoint_name: "my-endpoint", region_name: "us-west-2", model_id: "llama3")
+    # Inject mock client directly to bypass require "aws-sdk-sagemakerruntime"
+    m.instance_variable_set(:@client, mock_client)
+    m
   end
-
-  subject(:model) { described_class.new(endpoint_name: "my-endpoint", region_name: "us-west-2", model_id: "llama3") }
 
   describe "#initialize" do
     it "stores the endpoint_name in config" do

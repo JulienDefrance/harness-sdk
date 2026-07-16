@@ -12,11 +12,12 @@ RSpec.describe Strands::Storage::S3 do
 
   let(:mock_client) { instance_double("Aws::S3::Client") }
 
-  before do
-    allow(Aws::S3::Client).to receive(:new).and_return(mock_client)
+  subject(:storage) do
+    s = described_class.new(bucket: "test-bucket", prefix: "data/", region_name: "us-east-1")
+    # Inject mock client directly to bypass require "aws-sdk-s3"
+    s.instance_variable_set(:@client, mock_client)
+    s
   end
-
-  subject(:storage) { described_class.new(bucket: "test-bucket", prefix: "data/", region_name: "us-east-1") }
 
   describe "#initialize" do
     it "stores the bucket name" do
