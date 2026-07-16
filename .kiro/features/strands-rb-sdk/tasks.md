@@ -108,7 +108,7 @@
 - [x] Implement Strands::Models::Bedrock
 - [x] Map Converse API to streaming events
 - [x] Handle tool use formatting
-- [ ] Write specs with mocked API responses
+- [x] Write specs with mocked API responses
 
 ### Task 5.2: OpenAI Provider
 - [x] Implement Strands::Models::OpenAI
@@ -120,7 +120,7 @@
 - [x] Implement Strands::Models::Anthropic
 - [x] Map Messages API to streaming events
 - [x] Handle tool use blocks
-- [ ] Write specs with mocked API responses
+- [x] Write specs with mocked API responses
 
 ### Task 5.4: Other Providers
 - [x] Implement Ollama provider
@@ -152,7 +152,7 @@
 - [x] Implement MCP SSE transport
 - [x] Implement tool discovery from MCP servers
 - [x] Implement tool invocation via MCP
-- [ ] Write specs with mocked MCP server
+- [x] Write specs with mocked MCP server
 
 ---
 
@@ -166,10 +166,10 @@
 - [x] Streaming tests
 
 ### Task 7.2: Documentation
-- [ ] YARD docs on all public APIs
+- [x] YARD docs on all public APIs
 - [x] Usage examples in README
-- [ ] Architecture guide
-- [ ] Provider setup guides
+- [x] Architecture guide
+- [x] Provider setup guides
 
 ---
 
