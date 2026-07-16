@@ -1,0 +1,27 @@
+{
+  "id": "FEAT-001",
+  "type": "feat",
+  "description": "Write RSpec specs for the Bedrock, Anthropic model providers and MCP Client, following existing patterns from openai_spec.rb and ollama_spec.rb.",
+  "status": "in_progress",
+  "steps": [
+    "Create spec/strands/models/bedrock_spec.rb following the pattern in spec/strands/models/openai_spec.rb. Include: (a) #initialize tests for config storage, default region, AWS credential handling, SDK detection; (b) #update_config and #get_config tests; (c) #inspect test showing redacted output; (d) #stream tests with HTTP path mocked (stub_http_streaming helper) covering: successful text response with Bedrock JSON event stream format, tool use response with toolUse events, 429 rate limit raising ModelThrottledError, 400 context overflow raising ContextWindowOverflowError. Bedrock streams binary events containing JSON objects like {messageStart:...}, {contentBlockStart:...}, {contentBlockDelta:...}, {contentBlockStop:...}, {messageStop:...}, {metadata:...}.",
+    "Create spec/strands/models/anthropic_spec.rb following the same pattern. Include: (a) #initialize tests for config storage, default base_url, api_key from ENV; (b) #update_config and #get_config tests; (c) #inspect test; (d) #format_request tests for messages formatting, system prompt, tools, tool_choice variants (ToolChoiceAuto, ToolChoiceAny, ToolChoiceTool); (e) #stream tests with SSE format mocked covering: text response with message_start/content_block_start/content_block_delta/content_block_stop/message_delta events, tool use response with tool_use content blocks and input_json_delta, 429 rate limit, 529 overloaded, 400 context overflow. Anthropic SSE lines are 'data: {json}' format.",
+    "Create spec/strands/tools/mcp_client_spec.rb. Include: (a) #initialize tests for transport config storage; (b) #connected? test; (c) stdio transport tests: mock IO.pipe and Process.spawn, test #start performs initialize handshake (sends JSON-RPC initialize request, receives response, sends notifications/initialized), test #list_tools sends tools/list and parses response, test #call_tool sends tools/call with arguments, test #stop sends cancellation and kills process; (d) HTTP transport tests: mock Net::HTTP to test #start, #list_tools, #call_tool over HTTP; (e) #to_definitions test that converts MCP tools to Definition objects; (f) error cases: not connected raises RuntimeError, initialization failure.",
+    "Validate all three spec files with `ruby -c` to confirm valid Ruby syntax."
+  ],
+  "acceptance_criteria": [
+    "spec/strands/models/bedrock_spec.rb exists and passes `ruby -c` syntax check",
+    "spec/strands/models/anthropic_spec.rb exists and passes `ruby -c` syntax check",
+    "spec/strands/tools/mcp_client_spec.rb exists and passes `ruby -c` syntax check",
+    "Each spec follows the same structure as openai_spec.rb (describe blocks, let declarations, context grouping, helper methods)",
+    "Each spec mocks HTTP/IO appropriately without requiring real network or process access",
+    "Each spec covers initialization, config methods, streaming/main functionality, and error cases"
+  ],
+  "verification": [
+    "Run `ruby -c spec/strands/models/bedrock_spec.rb` and confirm Syntax OK",
+    "Run `ruby -c spec/strands/models/anthropic_spec.rb` and confirm Syntax OK",
+    "Run `ruby -c spec/strands/tools/mcp_client_spec.rb` and confirm Syntax OK"
+  ],
+  "blocked_reason": null,
+  "findings": ""
+}
