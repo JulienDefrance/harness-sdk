@@ -14,7 +14,7 @@ jobs:
       contents: read
     strategy:
       matrix:
-        ruby-version: ["3.2", "3.3", "3.4"]
+        ruby-version: ["4.0"]
       fail-fast: false
     runs-on: ubuntu-latest
     # Successful test legs run in well under 5 min; 20 min caps a hung step
@@ -61,7 +61,7 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: "3.2"
+          ruby-version: "4.0"
           bundler-cache: true
           working-directory: strands-rb
 
