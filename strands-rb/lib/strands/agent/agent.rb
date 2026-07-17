@@ -24,6 +24,12 @@ module Strands
     #   result = agent.call("What is 2 + 2?")
     #   puts result.text
     #
+    # @example Using the default model (Bedrock)
+    #   # When no model is given, the Agent defaults to Strands::Models::Bedrock,
+    #   # which requires AWS credentials to be configured (see Bedrock docs).
+    #   agent = Strands::Agent::Agent.new(system_prompt: "You are a helpful assistant.")
+    #   result = agent.call("What is 2 + 2?")
+    #
     # @example With tools
     #   calculator = Strands.tool("calculator",
     #     description: "Evaluates math expressions",
@@ -69,7 +75,10 @@ module Strands
 
       # Creates a new Agent.
       #
-      # @param model [Object, nil] model provider (defaults to nil; must implement Models::Base)
+      # @param model [Object, nil] model provider (must implement Models::Base). Defaults to
+      #   {Strands::Models::Bedrock} (using its own default model_id) when not specified,
+      #   matching the Python and TypeScript SDKs. Pass a model explicitly to pin behavior
+      #   or to use a different provider.
       # @param tools [Array] tools to register (Definition, Hash, or callable objects)
       # @param system_prompt [String, nil] system prompt for model context
       # @param hooks [Array<Object>] hook providers implementing #register_hooks
@@ -93,7 +102,7 @@ module Strands
         max_turns: EventLoop::Cycle::DEFAULT_MAX_TURNS,
         name: "Strands Agent"
       )
-        @model = model
+        @model = model || Models::Bedrock.new
         @system_prompt = system_prompt
         @messages = []
         @name = name

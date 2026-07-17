@@ -24,7 +24,7 @@ model = Strands::Models::Bedrock.new(
 
 | Parameter | Type | Default | Description |
 |-----------|------|---------|-------------|
-| `model_id` | String | (required) | Bedrock model identifier |
+| `model_id` | String | `Bedrock::DEFAULT_BEDROCK_MODEL_ID` (with a warning) | Bedrock model identifier. Pass explicitly to pin behavior across releases. |
 | `region` | String | `ENV["AWS_REGION"]` or `"us-west-2"` | AWS region |
 | `access_key_id` | String | `ENV["AWS_ACCESS_KEY_ID"]` | AWS access key ID |
 | `secret_access_key` | String | `ENV["AWS_SECRET_ACCESS_KEY"]` | AWS secret access key |
@@ -69,6 +69,21 @@ agent = Strands::Agent::Agent.new(
   system_prompt: "You are a helpful assistant."
 )
 
+result = agent.call("What is the capital of France?")
+puts result.text
+```
+
+### Using the Default Model
+
+If you don't pass a `model` to `Agent.new`, or don't pass a `model_id` to `Bedrock.new`, the
+provider falls back to `Bedrock::DEFAULT_BEDROCK_MODEL_ID` and emits a warning on `$stderr`. This
+default is subject to change between releases -- pin an explicit `model_id` for stable behavior.
+
+```ruby
+require "strands"
+
+# Defaults to Strands::Models::Bedrock with its default model_id.
+agent = Strands::Agent::Agent.new(system_prompt: "You are a helpful assistant.")
 result = agent.call("What is the capital of France?")
 puts result.text
 ```

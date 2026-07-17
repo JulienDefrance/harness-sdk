@@ -68,6 +68,20 @@ RSpec.describe Strands::Models::Bedrock do
       expect(m.config[:params][:max_tokens]).to eq(2048)
       expect(m.config[:params][:temperature]).to eq(0.7)
     end
+
+    context "when model_id is not provided" do
+      it "falls back to the default Bedrock model ID" do
+        m = nil
+        expect { m = described_class.new }.to output(/using default modelId/).to_stderr
+        expect(m.config[:model_id]).to eq(described_class::DEFAULT_BEDROCK_MODEL_ID)
+      end
+
+      it "does not warn when model_id is provided explicitly" do
+        expect {
+          described_class.new(model_id: "anthropic.claude-3-5-sonnet-20241022-v2:0")
+        }.not_to output.to_stderr
+      end
+    end
   end
 
   describe "#update_config" do

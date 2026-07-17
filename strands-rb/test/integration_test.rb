@@ -175,6 +175,52 @@ class TestAgentEndToEnd < Minitest::Test
 end
 
 # ==================================================================
+# Test: Agent defaults to Bedrock when no model is given
+# ==================================================================
+class TestAgentDefaultModel < Minitest::Test
+  def test_agent_defaults_to_bedrock_when_model_omitted
+    agent = capture_io_ignoring_warnings { Strands::Agent::Agent.new }
+
+    assert_kind_of Strands::Models::Bedrock, agent.model
+  end
+
+  def test_agent_uses_bedrock_default_model_id
+    agent = capture_io_ignoring_warnings { Strands::Agent::Agent.new }
+
+    assert_equal Strands::Models::Bedrock::DEFAULT_BEDROCK_MODEL_ID, agent.model.config[:model_id]
+  end
+
+  def test_agent_respects_explicit_model_over_default
+    model = MockStreamingModel.new(responses: [StreamHelper.text_response("hi")])
+    agent = Strands::Agent::Agent.new(model: model)
+
+    assert_same model, agent.model
+  end
+
+  def test_bedrock_warns_when_model_id_omitted
+    _out, err = capture_io { Strands::Models::Bedrock.new }
+
+    assert_match(/using default modelId/, err)
+  end
+
+  def test_bedrock_does_not_warn_when_model_id_given
+    _out, err = capture_io { Strands::Models::Bedrock.new(model_id: "anthropic.claude-3-5-sonnet-20241022-v2:0") }
+
+    assert_empty err
+  end
+
+  private
+
+  # Swallows the "using default modelId" warning emitted on $stderr so it
+  # doesn't clutter test output, while still returning the block's result.
+  def capture_io_ignoring_warnings
+    result = nil
+    capture_io { result = yield }
+    result
+  end
+end
+
+# ==================================================================
 # Test: Multiple tools with sequential calls
 # ==================================================================
 class TestMultiToolAgent < Minitest::Test

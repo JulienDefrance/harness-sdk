@@ -21,12 +21,21 @@ module Strands
     #   )
     #   model.stream(messages) { |event| process(event) }
     #
+    # @example Using the default model
+    #   # model_id defaults to Bedrock::DEFAULT_BEDROCK_MODEL_ID with a warning.
+    #   # Pass model_id explicitly to pin behavior across releases.
+    #   model = Strands::Models::Bedrock.new
+    #
     class Bedrock
       include Base
       include StreamEventBuilder
 
       # Default AWS region for Bedrock
       DEFAULT_REGION = "us-west-2"
+
+      # Default Bedrock model ID used when no model_id is specified.
+      # Subject to change between releases -- pass model_id explicitly to pin behavior.
+      DEFAULT_BEDROCK_MODEL_ID = "global.anthropic.claude-sonnet-4-6"
 
       # Context overflow error messages from Bedrock
       CONTEXT_OVERFLOW_MESSAGES = [
@@ -41,15 +50,18 @@ module Strands
 
       # Initialize the Bedrock model provider.
       #
-      # @param model_id [String] the Bedrock model identifier
+      # @param model_id [String, nil] the Bedrock model identifier. Defaults to
+      #   {DEFAULT_BEDROCK_MODEL_ID} (a moving target across releases) with a warning;
+      #   pass an explicit model_id to pin behavior.
       # @param region [String] AWS region (defaults to ENV["AWS_REGION"] or "us-west-2")
       # @param access_key_id [String, nil] AWS access key ID
       # @param secret_access_key [String, nil] AWS secret access key
       # @param session_token [String, nil] AWS session token (for temporary credentials)
       # @param params [Hash] additional model parameters (max_tokens, temperature, etc.)
-      def initialize(model_id:, region: nil, access_key_id: nil, secret_access_key: nil, session_token: nil, **params)
+      def initialize(model_id: nil, region: nil, access_key_id: nil, secret_access_key: nil, session_token: nil,
+                      **params)
         @config = {
-          model_id: model_id,
+          model_id: model_id || default_model_id_with_warning,
           region: region || ENV.fetch("AWS_REGION", ENV.fetch("AWS_DEFAULT_REGION", DEFAULT_REGION)),
           access_key_id: access_key_id || ENV.fetch("AWS_ACCESS_KEY_ID", nil),
           secret_access_key: secret_access_key || ENV.fetch("AWS_SECRET_ACCESS_KEY", nil),
@@ -116,6 +128,22 @@ module Strands
       end
 
       private
+
+      # Returns the default Bedrock model ID and warns that it is subject to change.
+      #
+      # Mirrors the behavior of the Python and TypeScript SDKs: when no model_id is
+      # provided, fall back to a default and emit a one-time warning so callers know
+      # to pin an explicit model_id for stable behavior across releases.
+      #
+      # @return [String] the default model ID
+      def default_model_id_with_warning
+        Kernel.warn(
+          "model_id=<#{DEFAULT_BEDROCK_MODEL_ID}> | using default modelId, which is subject to change | " \
+          "set model_id explicitly to pin the value",
+          uplevel: 1
+        )
+        DEFAULT_BEDROCK_MODEL_ID
+      end
 
       # Stream using the AWS SDK (if available).
       #

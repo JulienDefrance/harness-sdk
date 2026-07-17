@@ -73,6 +73,20 @@ RSpec.describe Strands::Agent::Agent do
       agent = described_class.new(model: mock_model, tools: [tool])
       expect(agent.tool_registry.registered?("test_tool")).to be true
     end
+
+    context "when model is not provided" do
+      it "defaults to Strands::Models::Bedrock" do
+        agent = nil
+        expect { agent = described_class.new }.to output.to_stderr
+        expect(agent.model).to be_a(Strands::Models::Bedrock)
+      end
+
+      it "uses the Bedrock provider's default model_id" do
+        agent = nil
+        expect { agent = described_class.new }.to output.to_stderr
+        expect(agent.model.config[:model_id]).to eq(Strands::Models::Bedrock::DEFAULT_BEDROCK_MODEL_ID)
+      end
+    end
   end
 
   describe "#call" do

@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- `Strands::Agent::Agent.new` now defaults to `Strands::Models::Bedrock` when no
+  `model` is given, matching the Python and TypeScript SDKs.
+- `Strands::Models::Bedrock.new` now defaults `model_id` to
+  `Bedrock::DEFAULT_BEDROCK_MODEL_ID` (currently `"global.anthropic.claude-sonnet-4-6"`)
+  when not provided, emitting a warning on `$stderr` since the default is subject to
+  change between releases.
+
 ## [0.1.0] - 2025-07-16
 
 ### Added

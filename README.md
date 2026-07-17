@@ -59,7 +59,7 @@ MCP, streaming, multi-agent patterns, and structured output are all built in.
 
 ## Quick Start
 
-The Python and TypeScript SDKs default to the Amazon Bedrock model provider when no model is specified; the Ruby SDK requires an explicit model instance (see the Ruby example below). Either way, you'll need AWS credentials configured and model access enabled for Claude Sonnet to use Bedrock. The [Quickstart Guide](https://strandsagents.com/docs/user-guide/quickstart/overview/) covers configuring other providers (Anthropic, OpenAI, Gemini, Ollama, and more).
+All three SDKs default to the Amazon Bedrock model provider, so you'll need AWS credentials configured and model access enabled for Claude Sonnet. The [Quickstart Guide](https://strandsagents.com/docs/user-guide/quickstart/overview/) covers configuring other providers (Anthropic, OpenAI, Gemini, Ollama, and more).
 
 ### Python
 
@@ -109,9 +109,7 @@ gem "strands", path: "path/to/harness-sdk/strands-rb"
 ```ruby
 require "strands"
 
-agent = Strands::Agent::Agent.new(
-  model: Strands::Models::Bedrock.new(model_id: "anthropic.claude-3-5-sonnet-20241022-v2:0")
-)
+agent = Strands::Agent::Agent.new
 result = agent.call("What is the square root of 1764?")
 puts result.text
 ```
