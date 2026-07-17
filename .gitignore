@@ -36,6 +36,7 @@ coverage/
 .kiro/*
 !.kiro/skills
 !.kiro/references
+!.kiro/features
 .vscode/
 .idea/
 *.swp

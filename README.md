@@ -35,12 +35,13 @@
 
 Strands Agents is a simple yet powerful SDK that takes a model-driven approach to building and running AI agents. From simple conversational assistants to complex autonomous workflows, from local development to production deployment, Strands Agents scales with your needs.
 
-This monorepo contains the Python SDK, TypeScript SDK, documentation site, and supporting packages:
+This monorepo contains the Python SDK, TypeScript SDK, Ruby SDK, documentation site, and supporting packages:
 
 | Directory | Description |
 |-----------|-------------|
 | `strands-py/` | Python SDK: agent loop, model providers, tools ([PyPI](https://pypi.org/project/strands-agents/) · [releases](https://github.com/strands-agents/harness-sdk/releases?q=python%2F&expanded=false)) |
 | `strands-ts/` | TypeScript SDK: agent loop, model providers, tools ([npm](https://www.npmjs.com/package/@strands-agents/sdk) · [releases](https://github.com/strands-agents/harness-sdk/releases?q=typescript%2F&expanded=false)) |
+| `strands-rb/` | Ruby SDK: agent loop, model providers, tools (under active development, not yet published) |
 | `strandly/` | Developer CLI for local builds and workspace tooling |
 | `site/` | Source for the [strandsagents.com](https://strandsagents.com) documentation site (Astro/Starlight) |
 | `team/` | Governance and cross-SDK process docs (tenets, decisions, PR & compatibility guidelines, and `designs/` proposals) |
@@ -58,7 +59,7 @@ MCP, streaming, multi-agent patterns, and structured output are all built in.
 
 ## Quick Start
 
-Both SDKs default to the Amazon Bedrock model provider, so you'll need AWS credentials configured and model access enabled for Claude Sonnet. The [Quickstart Guide](https://strandsagents.com/docs/user-guide/quickstart/overview/) covers configuring other providers (Anthropic, OpenAI, Gemini, Ollama, and more).
+All three SDKs default to the Amazon Bedrock model provider, so you'll need AWS credentials configured and model access enabled for Claude Sonnet. The [Quickstart Guide](https://strandsagents.com/docs/user-guide/quickstart/overview/) covers configuring other providers (Anthropic, OpenAI, Gemini, Ollama, and more).
 
 ### Python
 
@@ -96,6 +97,25 @@ console.log(result)
 
 More in the [TypeScript SDK README](strands-ts/), including Zod-typed tools, structured output, and multi-agent patterns.
 
+### Ruby
+
+Requires Ruby 4.0+. The Ruby SDK is under active development and not yet published to RubyGems — install it locally from this repo in the meantime:
+
+```ruby
+# Gemfile
+gem "strands", path: "path/to/harness-sdk/strands-rb"
+```
+
+```ruby
+require "strands"
+
+agent = Strands::Agent::Agent.new
+result = agent.call("What is the square root of 1764?")
+puts result.text
+```
+
+More in the [Ruby SDK README](strands-rb/), including tool definitions, hooks, interventions, session persistence, and additional providers (OpenAI, Anthropic, Gemini, Ollama, and more).
+
 ## Documentation
 
 For detailed guidance & examples, explore our documentation:
@@ -104,7 +124,7 @@ For detailed guidance & examples, explore our documentation:
 - [Quick Start Guide](https://strandsagents.com/docs/user-guide/quickstart/overview/)
 - [Agent Loop](https://strandsagents.com/docs/user-guide/concepts/agents/agent-loop/)
 - [Examples](https://strandsagents.com/docs/examples/)
-- API Reference: [Python](https://strandsagents.com/docs/api/python/strands.agent.agent/) · [TypeScript](https://strandsagents.com/docs/api/typescript/)
+- API Reference: [Python](https://strandsagents.com/docs/api/python/strands.agent.agent/) · [TypeScript](https://strandsagents.com/docs/api/typescript/) · Ruby (not yet published; generate locally with `bundle exec yard doc` in `strands-rb/`)
 - [Production & Deployment Guide](https://strandsagents.com/docs/user-guide/deploy/operating-agents-in-production/)
 
 The docs themselves live in this monorepo under [`site/`](site/), and doc PRs are welcome alongside code changes.
@@ -126,6 +146,14 @@ hatch fmt         # format & lint
 npm ci            # install from repo root
 npm run build     # build
 npm test          # run unit tests
+```
+
+**Ruby SDK** (`strands-rb/`):
+```bash
+cd strands-rb
+bundle install
+bundle exec rspec    # run unit tests
+bundle exec rubocop  # lint
 ```
 
 **Documentation site** (`site/`):
